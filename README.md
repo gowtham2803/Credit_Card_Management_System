@@ -28,7 +28,8 @@ The project is built without using any frameworks like Spring, focusing on **cor
 - Monthly billing and due amount calculation  
 - EMI conversion for transactions  
 - Transaction history and monitoring  
-- Secure session-based access  
+- Secure session-based access 
+- User logout using session invalidation
 
 ---
 
@@ -65,6 +66,7 @@ Credit_Card_Management_System
 │       └── servlet
 │           ├── SignupServlet.java
 │           ├── LoginServlet.java
+│           ├── LogoutServlet.java
 │           ├── PurchaseServlet.java
 │           ├── BillingServlet.java
 │           ├── EmiServlet.java
