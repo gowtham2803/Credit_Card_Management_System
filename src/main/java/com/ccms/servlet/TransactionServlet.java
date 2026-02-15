@@ -13,7 +13,27 @@ public class TransactionServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
 
+        resp.setContentType("text/plain");
+
+        // 1️⃣ Check session
         HttpSession session = req.getSession(false);
+
+        if (session == null || session.getAttribute("userId") == null) {
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            resp.getWriter().print("Please login first.");
+            return;
+        }
+
+        // 2️⃣ Role-based authorization
+        String role = (String) session.getAttribute("role");
+
+        if (!"ADMIN".equals(role)) {
+            resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            resp.getWriter().print("Access denied. Admin only.");
+            return;
+        }
+
+        // 3️⃣ Admin allowed → fetch all transactions
         int userId = (int) session.getAttribute("userId");
 
         TransactionService service = new TransactionService();

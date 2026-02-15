@@ -1,6 +1,8 @@
 package com.ccms.dao;
 
 import com.ccms.config.DBConnection;
+import com.ccms.model.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,22 +25,26 @@ public class UserDAO {
             return false;
         }
     }
-    public int login(String email, String password) {
+    public User login(String email, String password) {
         try {
             Connection con = DBConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(
-                    "SELECT id FROM users WHERE email=? AND password=?"
+                    "SELECT id, role FROM users WHERE email=? AND password=?"
             );
             ps.setString(1, email);
             ps.setString(2, password);
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getInt("id");
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setRole(rs.getString("role"));
+                return user;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return -1;
+        return null;
     }
+
 }

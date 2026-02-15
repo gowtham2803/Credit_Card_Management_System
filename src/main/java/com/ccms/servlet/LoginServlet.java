@@ -1,5 +1,6 @@
 package com.ccms.servlet;
 
+import com.ccms.model.User;
 import com.ccms.service.UserService;
 
 import javax.servlet.annotation.WebServlet;
@@ -16,14 +17,16 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         UserService service = new UserService();
-        int userId = service.login(email, password);
+        User user = service.login(email, password);
 
-        if (userId > 0) {
+        if (user != null) {
             HttpSession session = req.getSession();
-            session.setAttribute("userId", userId);
+            session.setAttribute("userId", user.getId());
+            session.setAttribute("role", user.getRole());
             resp.getWriter().print("Login Success");
         } else {
             resp.getWriter().print("Invalid Credentials");
         }
+
     }
 }
