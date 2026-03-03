@@ -6,6 +6,7 @@ import com.ccms.service.UserService;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import com.ccms.util.PasswordUtil;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -14,7 +15,8 @@ public class LoginServlet extends HttpServlet {
             throws IOException {
 
         String email = req.getParameter("email");
-        String password = req.getParameter("password");
+        String rawPassword = req.getParameter("password");
+        String password = PasswordUtil.hashPassword(rawPassword);
 
         UserService service = new UserService();
         User user = service.login(email, password);
