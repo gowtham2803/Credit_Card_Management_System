@@ -1,11 +1,12 @@
 package com.ccms.servlet;
 
+import com.ccms.model.Transaction;
 import com.ccms.service.TransactionService;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.sql.ResultSet;
+import java.util.List;
 
 @WebServlet("/transactions")
 public class TransactionServlet extends HttpServlet {
@@ -15,40 +16,43 @@ public class TransactionServlet extends HttpServlet {
 
         resp.setContentType("text/plain");
 
-        // 1️⃣ Check session
         HttpSession session = req.getSession(false);
 
         if (session == null || session.getAttribute("userId") == null) {
-            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            resp.getWriter().print("Please login first.");
+            resp.getWriter().print("Please login first");
             return;
         }
 
-        // 2️⃣ Role-based authorization
-        String role = (String) session.getAttribute("role");
-
-        if (!"ADMIN".equals(role)) {
-            resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            resp.getWriter().print("Access denied. Admin only.");
-            return;
-        }
-
-        // 3️⃣ Admin allowed → fetch all transactions
         int userId = (int) session.getAttribute("userId");
 
-        TransactionService service = new TransactionService();
-        ResultSet rs = service.getHistory(userId);
+        // Pagination parameters (optional)
+        int page = 1;
+        int size = 5;
 
-        try {
-            while (rs.next()) {
-                resp.getWriter().println(
-                        "Txn ID: " + rs.getInt("id") +
-                                " | Amount: " + rs.getDouble("amount") +
-                                " | Date: " + rs.getTimestamp("transaction_date")
-                );
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (req.getParameter("page") != null) {
+            page = Integer.parseInt(req.getParameter("page"));
+        }
+
+        if (req.getParameter("size") != null) {
+            size = Integer.parseInt(req.getParameter("size"));
+        }
+
+        TransactionService service = new TransactionService();
+
+        List<Transaction> transactions =
+                service.getPaginatedTransactions(userId, page, size);
+
+        if (transactions.isEmpty()) {
+            resp.getWriter().println("No transactions found.");
+            return;
+        }
+
+        for (Transaction tx : transactions) {
+            resp.getWriter().println(
+                    "Txn ID: " + tx.getId() +
+                            " | Amount: " + tx.getAmount() +
+                            " | Date: " + tx.getTransactionDate()
+            );
         }
     }
 }
