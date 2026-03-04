@@ -3,6 +3,7 @@ package com.ccms.service;
 import com.ccms.dao.CardDAO;
 import com.ccms.dao.TransactionDAO;
 import com.ccms.model.Transaction;
+import com.ccms.util.ValidationUtil;
 
 import java.util.List;
 
@@ -26,6 +27,9 @@ public class TransactionService {
 
         if (txId > 0) {
             return cardDAO.updateUsedAmount(cardId, amount);
+        }
+        if (!ValidationUtil.isValidAmount(amount)) {
+            return false;
         }
 
         return false;

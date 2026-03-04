@@ -1,12 +1,13 @@
 package com.ccms.servlet;
 
 import com.ccms.service.UserService;
+import com.ccms.util.PasswordUtil;
+import com.ccms.util.ValidationUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import com.ccms.util.PasswordUtil;
 
 @WebServlet("/signup")
 public class SignupServlet extends HttpServlet {
@@ -14,14 +15,41 @@ public class SignupServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
+        resp.setContentType("text/plain");
+
+        // 1️⃣ Get parameters
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         String rawPassword = req.getParameter("password");
+
+        // 2️⃣ Validate inputs
+        if (!ValidationUtil.isValidName(name)) {
+            resp.getWriter().println("Invalid name format");
+            return;
+        }
+
+        if (!ValidationUtil.isValidEmail(email)) {
+            resp.getWriter().println("Invalid email format");
+            return;
+        }
+
+        if (!ValidationUtil.isValidPassword(rawPassword)) {
+            resp.getWriter().println("Password must contain uppercase, lowercase and number (min 8 chars)");
+            return;
+        }
+
+        // 3️⃣ Hash password
         String password = PasswordUtil.hashPassword(rawPassword);
 
+        // 4️⃣ Call service
         UserService service = new UserService();
         boolean result = service.signup(name, email, password);
 
-        resp.getWriter().print(result ? "Signup Successful" : "Signup Failed");
+        // 5️⃣ Response
+        if (result) {
+            resp.getWriter().println("Signup Successful");
+        } else {
+            resp.getWriter().println("Signup Failed");
+        }
     }
 }
