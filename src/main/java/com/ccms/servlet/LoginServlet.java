@@ -18,11 +18,9 @@ public class LoginServlet extends HttpServlet {
 
         resp.setContentType("text/plain");
 
-        // 1️⃣ Get parameters
         String email = req.getParameter("email");
         String rawPassword = req.getParameter("password");
 
-        // 2️⃣ Validate inputs
         if (!ValidationUtil.isValidEmail(email)) {
             resp.getWriter().println("Invalid email format");
             return;
@@ -33,10 +31,8 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        // 3️⃣ Hash password
         String password = PasswordUtil.hashPassword(rawPassword);
 
-        // 4️⃣ Login service
         UserService service = new UserService();
         User user = service.login(email, password);
 

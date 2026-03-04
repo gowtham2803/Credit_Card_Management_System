@@ -17,12 +17,10 @@ public class SignupServlet extends HttpServlet {
 
         resp.setContentType("text/plain");
 
-        // 1️⃣ Get parameters
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         String rawPassword = req.getParameter("password");
 
-        // 2️⃣ Validate inputs
         if (!ValidationUtil.isValidName(name)) {
             resp.getWriter().println("Invalid name format");
             return;
@@ -38,14 +36,11 @@ public class SignupServlet extends HttpServlet {
             return;
         }
 
-        // 3️⃣ Hash password
         String password = PasswordUtil.hashPassword(rawPassword);
 
-        // 4️⃣ Call service
         UserService service = new UserService();
         boolean result = service.signup(name, email, password);
 
-        // 5️⃣ Response
         if (result) {
             resp.getWriter().println("Signup Successful");
         } else {

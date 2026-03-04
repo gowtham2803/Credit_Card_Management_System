@@ -4,15 +4,12 @@ import java.util.regex.Pattern;
 
 public class ValidationUtil {
 
-    // 🔹 Email regex
     private static final Pattern EMAIL_PATTERN =
             Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
 
-    // 🔹 Strong password (min 8 chars, 1 uppercase, 1 lowercase, 1 digit)
     private static final Pattern PASSWORD_PATTERN =
             Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$");
 
-    // 🔹 Name (only letters and spaces)
     private static final Pattern NAME_PATTERN =
             Pattern.compile("^[A-Za-z ]{3,50}$");
 

@@ -9,7 +9,6 @@ import java.util.List;
 
 public class TransactionDAO {
 
-    // 🔹 Add Transaction
     public int addTransaction(int cardId, double amount) {
 
         try (Connection con = DBConnection.getConnection();
@@ -34,8 +33,6 @@ public class TransactionDAO {
         return -1;
     }
 
-
-    // 🔹 Get All Transactions for Specific User
     public List<Transaction> getTransactionsByUser(int userId) {
 
         List<Transaction> transactions = new ArrayList<>();
@@ -66,9 +63,6 @@ public class TransactionDAO {
 
         return transactions;
     }
-
-
-    // 🔹 Get Paginated Transactions for User
     public List<Transaction> getPaginatedTransactions(int userId, int page, int size) {
 
         List<Transaction> transactions = new ArrayList<>();
@@ -104,9 +98,6 @@ public class TransactionDAO {
 
         return transactions;
     }
-
-
-    // 🔹 Get Total Transaction Count for User (For Pagination)
     public int getTotalTransactionCount(int userId) {
 
         try (Connection con = DBConnection.getConnection();
@@ -130,9 +121,6 @@ public class TransactionDAO {
 
         return 0;
     }
-
-
-    // 🔹 ADMIN: Get All Transactions (No User Filter)
     public List<Transaction> getAllTransactions(int page, int size) {
 
         List<Transaction> transactions = new ArrayList<>();

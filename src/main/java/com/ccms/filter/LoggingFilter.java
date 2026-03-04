@@ -27,7 +27,6 @@ public class LoggingFilter implements Filter {
 
         long startTime = System.currentTimeMillis();
 
-        // PRE-PROCESSING (Before servlet)
         logger.info("Incoming Request → "
                 + "Method: " + method
                 + " | URL: " + url
@@ -39,7 +38,6 @@ public class LoggingFilter implements Filter {
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
 
-        // POST-PROCESSING (After servlet)
         logger.info("Completed Request → "
                 + "URL: " + url
                 + " | Execution Time: " + executionTime + " ms");

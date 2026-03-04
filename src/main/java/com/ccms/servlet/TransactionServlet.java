@@ -25,7 +25,6 @@ public class TransactionServlet extends HttpServlet {
 
         int userId = (int) session.getAttribute("userId");
 
-        // Pagination parameters (optional)
         int page = 1;
         int size = 5;
 

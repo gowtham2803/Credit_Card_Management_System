@@ -9,7 +9,6 @@ public class Transaction {
     private double amount;
     private Timestamp transactionDate;
 
-    // 🔹 Getter & Setter for id
     public int getId() {
         return id;
     }
@@ -18,7 +17,6 @@ public class Transaction {
         this.id = id;
     }
 
-    // 🔹 Getter & Setter for cardId
     public int getCardId() {
         return cardId;
     }
@@ -27,7 +25,6 @@ public class Transaction {
         this.cardId = cardId;
     }
 
-    // 🔹 Getter & Setter for amount
     public double getAmount() {
         return amount;
     }
@@ -36,7 +33,6 @@ public class Transaction {
         this.amount = amount;
     }
 
-    // 🔹 Getter & Setter for transactionDate
     public Timestamp getTransactionDate() {
         return transactionDate;
     }

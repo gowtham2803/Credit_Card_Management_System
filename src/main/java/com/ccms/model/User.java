@@ -6,9 +6,7 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private String role;   // USER or ADMIN
-
-    // ===== Getter & Setter Methods =====
+    private String role;
 
     public int getId() {
         return id;

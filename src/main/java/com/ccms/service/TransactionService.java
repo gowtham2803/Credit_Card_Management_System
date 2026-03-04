@@ -12,7 +12,6 @@ public class TransactionService {
     private CardDAO cardDAO = new CardDAO();
     private TransactionDAO txDAO = new TransactionDAO();
 
-    // 🔹 Purchase Logic
     public boolean purchase(int userId, double amount) {
 
         int cardId = cardDAO.getCardIdByUser(userId);
@@ -35,22 +34,18 @@ public class TransactionService {
         return false;
     }
 
-    // 🔹 Get All Transactions for a User
     public List<Transaction> getHistory(int userId) {
         return txDAO.getTransactionsByUser(userId);
     }
 
-    // 🔹 Pagination for User Transactions
     public List<Transaction> getPaginatedTransactions(int userId, int page, int size) {
         return txDAO.getPaginatedTransactions(userId, page, size);
     }
 
-    // 🔹 Get Total Count (For Pagination)
     public int getTotalTransactionCount(int userId) {
         return txDAO.getTotalTransactionCount(userId);
     }
 
-    // 🔹 Admin: Get All Transactions
     public List<Transaction> getAllTransactions(int page, int size) {
         return txDAO.getAllTransactions(page, size);
     }
