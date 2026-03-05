@@ -28,6 +28,7 @@ public class UserDAO {
     public User login(String email, String password) {
         try {
             Connection con = DBConnection.getConnection();
+            System.out.println("Connection class: " + con.getClass());
             PreparedStatement ps = con.prepareStatement(
                     "SELECT id, role FROM users WHERE email=? AND password=?"
             );
