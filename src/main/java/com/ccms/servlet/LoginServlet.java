@@ -4,6 +4,7 @@ import com.ccms.model.User;
 import com.ccms.service.UserService;
 import com.ccms.util.PasswordUtil;
 import com.ccms.util.ValidationUtil;
+import com.ccms.util.EmailUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,11 +38,21 @@ public class LoginServlet extends HttpServlet {
         User user = service.login(email, password);
 
         if (user != null) {
+
             HttpSession session = req.getSession(true);
             session.setAttribute("userId", user.getId());
             session.setAttribute("role", user.getRole());
 
+            // Send login notification email
+            String subject = "Login Alert - CCMS";
+            String message = "Hello,\n\n"
+                    + "Your account was successfully logged in.\n"
+                    + "If this was not you, please contact support immediately.";
+
+            EmailUtil.sendEmail("gowthamr280321@gmail.com", subject, message);
+
             resp.getWriter().println("Login Successful");
+
         } else {
             resp.getWriter().println("Invalid credentials");
         }
