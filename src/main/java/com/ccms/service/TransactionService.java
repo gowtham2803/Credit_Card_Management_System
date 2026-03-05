@@ -17,7 +17,6 @@ public class TransactionService {
         int cardId = cardDAO.getCardIdByUser(userId);
         if (cardId == -1) return false;
 
-        // Credit limit validation
         if (!cardDAO.hasLimit(cardId, amount)) {
             return false;
         }
