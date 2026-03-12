@@ -1,0 +1,35 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="2" author="gowtham">
+
+        <createTable tableName="credit_cards">
+
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="user_id" type="INT"/>
+
+            <column name="card_number" type="VARCHAR(16)"/>
+
+            <column name="credit_limit" type="DOUBLE"/>
+
+            <column name="used_amount" type="DOUBLE" defaultValue="0"/>
+
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="credit_cards"
+                baseColumnNames="user_id"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                constraintName="fk_creditcards_users"/>
+
+    </changeSet>
+
+</databaseChangeLog>
