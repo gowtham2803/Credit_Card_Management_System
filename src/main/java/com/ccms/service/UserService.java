@@ -5,7 +5,15 @@ import com.ccms.model.User;
 
 public class UserService {
 
-    UserDAO dao = new UserDAO();
+    private UserDAO dao;
+
+    public UserService(UserDAO dao) {
+        this.dao = dao;
+    }
+
+    public UserService() {
+        this.dao = new UserDAO();
+    }
 
     public boolean signup(String name, String email, String password) {
         return dao.registerUser(name, email, password);

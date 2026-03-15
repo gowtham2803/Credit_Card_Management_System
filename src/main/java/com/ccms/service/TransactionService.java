@@ -9,13 +9,30 @@ import java.util.List;
 
 public class TransactionService {
 
-    private CardDAO cardDAO = new CardDAO();
-    private TransactionDAO txDAO = new TransactionDAO();
+    private CardDAO cardDAO;
+    private TransactionDAO txDAO;
+
+    public TransactionService(CardDAO cardDAO, TransactionDAO txDAO) {
+        this.cardDAO = cardDAO;
+        this.txDAO = txDAO;
+    }
+
+    public TransactionService() {
+        this.cardDAO = new CardDAO();
+        this.txDAO = new TransactionDAO();
+    }
 
     public boolean purchase(int userId, double amount) {
 
+        if (!ValidationUtil.isValidAmount(amount)) {
+            return false;
+        }
+
         int cardId = cardDAO.getCardIdByUser(userId);
-        if (cardId == -1) return false;
+
+        if (cardId == -1) {
+            return false;
+        }
 
         if (!cardDAO.hasLimit(cardId, amount)) {
             return false;
@@ -25,9 +42,6 @@ public class TransactionService {
 
         if (txId > 0) {
             return cardDAO.updateUsedAmount(cardId, amount);
-        }
-        if (!ValidationUtil.isValidAmount(amount)) {
-            return false;
         }
 
         return false;
