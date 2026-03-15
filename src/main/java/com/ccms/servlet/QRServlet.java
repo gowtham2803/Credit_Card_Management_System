@@ -5,9 +5,14 @@ import com.ccms.util.QRUtil;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.io.OutputStream;
 
 @WebServlet("/generateQR")
 public class QRServlet extends HttpServlet {
+
+    protected void generateQR(String text, OutputStream out) throws Exception {
+        QRUtil.generateQRCode(text, out);
+    }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
@@ -25,7 +30,7 @@ public class QRServlet extends HttpServlet {
 
             String qrText = "Transaction ID: " + txnId;
 
-            QRUtil.generateQRCode(qrText, resp.getOutputStream());
+            generateQR(qrText, resp.getOutputStream());
 
         } catch (Exception e) {
             e.printStackTrace();

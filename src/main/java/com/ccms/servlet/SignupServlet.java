@@ -12,6 +12,12 @@ import java.io.IOException;
 @WebServlet("/signup")
 public class SignupServlet extends HttpServlet {
 
+    private UserService service = new UserService();
+
+    public void setUserService(UserService service) {
+        this.service = service;
+    }
+
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
@@ -38,7 +44,6 @@ public class SignupServlet extends HttpServlet {
 
         String password = PasswordUtil.hashPassword(rawPassword);
 
-        UserService service = new UserService();
         boolean result = service.signup(name, email, password);
 
         if (result) {

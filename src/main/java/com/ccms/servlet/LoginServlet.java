@@ -14,6 +14,12 @@ import java.io.IOException;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
+    private UserService service = new UserService();
+
+    public void setUserService(UserService service) {
+        this.service = service;
+    }
+
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
@@ -34,7 +40,6 @@ public class LoginServlet extends HttpServlet {
 
         String password = PasswordUtil.hashPassword(rawPassword);
 
-        UserService service = new UserService();
         User user = service.login(email, password);
 
         if (user != null) {
@@ -43,7 +48,6 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("userId", user.getId());
             session.setAttribute("role", user.getRole());
 
-            // Send login notification email
             String subject = "Login Alert - CCMS";
             String message = "Hello,\n\n"
                     + "Your account was successfully logged in.\n"

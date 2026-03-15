@@ -9,6 +9,12 @@ import java.io.IOException;
 @WebServlet("/purchase")
 public class PurchaseServlet extends HttpServlet {
 
+    private TransactionService transactionService = new TransactionService();
+
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
 
@@ -17,8 +23,7 @@ public class PurchaseServlet extends HttpServlet {
 
         double amount = Double.parseDouble(req.getParameter("amount"));
 
-        TransactionService service = new TransactionService();
-        boolean result = service.purchase(userId, amount);
+        boolean result = transactionService.purchase(userId, amount);
 
         resp.getWriter().print(
                 result ? "Purchase Successful" : "Purchase Failed"

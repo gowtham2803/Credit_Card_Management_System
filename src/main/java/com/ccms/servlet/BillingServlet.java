@@ -10,6 +10,10 @@ import java.sql.*;
 @WebServlet("/billing")
 public class BillingServlet extends HttpServlet {
 
+    protected Connection getConnection() throws Exception {
+        return DBConnection.getConnection();
+    }
+
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
 
@@ -17,7 +21,7 @@ public class BillingServlet extends HttpServlet {
         int userId = (int) session.getAttribute("userId");
 
         try {
-            Connection con = DBConnection.getConnection();
+            Connection con = getConnection();
 
             PreparedStatement ps = con.prepareStatement(
                     "SELECT used_amount FROM credit_cards WHERE user_id=?"
@@ -25,12 +29,15 @@ public class BillingServlet extends HttpServlet {
             ps.setInt(1, userId);
 
             ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
                 double due = rs.getDouble("used_amount");
+
                 resp.getWriter().println("Monthly Bill Generated");
                 resp.getWriter().println("Total Due Amount: " + due);
                 resp.getWriter().println("Payment Due Date: 15th of this month");
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

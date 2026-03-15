@@ -11,6 +11,12 @@ import java.util.List;
 @WebServlet("/transactions")
 public class TransactionServlet extends HttpServlet {
 
+    private TransactionService transactionService = new TransactionService();
+
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
 
@@ -36,10 +42,8 @@ public class TransactionServlet extends HttpServlet {
             size = Integer.parseInt(req.getParameter("size"));
         }
 
-        TransactionService service = new TransactionService();
-
         List<Transaction> transactions =
-                service.getPaginatedTransactions(userId, page, size);
+                transactionService.getPaginatedTransactions(userId, page, size);
 
         if (transactions.isEmpty()) {
             resp.getWriter().println("No transactions found.");
