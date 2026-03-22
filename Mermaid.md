@@ -1,87 +1,108 @@
-## 🏗️ System Architecture
+## 🏗️ System Architecture (Enhanced)
 
 ```mermaid
 graph TD
 
-A[User / Browser] --> B[Servlet Layer]
+%% Layers
+subgraph Client
+A[User / Browser]
+end
 
-B --> C1[UserServlet]
-B --> C2[TransactionServlet]
-B --> C3[PurchaseServlet]
-B --> C4[EmiServlet]
-B --> C5[BillingServlet]
-B --> C6[QRServlet]
-B --> C7[LogoutServlet]
+subgraph Web Layer
+B[Servlet Layer]
+C1[PurchaseServlet]
+C2[TransactionServlet]
+C3[EmiServlet]
+C4[BillingServlet]
+C5[QRServlet]
+C6[LogoutServlet]
+end
 
-C1 --> D[Service Layer]
-C2 --> D
-C3 --> D
-C4 --> D
+subgraph Service Layer
+D1[TransactionService]
+D2[EmiService]
+end
 
-D --> E1[UserService]
-D --> E2[TransactionService]
-D --> E3[EmiService]
+subgraph Database
+E[(MySQL Database)]
+end
 
-E1 --> F[Database]
-E2 --> F
-E3 --> F
+%% Flow
+A --> B
+B --> C1
+B --> C2
+B --> C3
+B --> C4
+B --> C5
+B --> C6
 
-F --> G[(MySQL Database)]
+C1 --> D1
+C2 --> D1
+C3 --> D2
+
+D1 --> E
+D2 --> E
+
+%% Styling
+style A fill:#1f77b4,color:#fff
+style B fill:#2ca02c,color:#fff
+style D1 fill:#ff7f0e,color:#fff
+style D2 fill:#ff7f0e,color:#fff
+style E fill:#9467bd,color:#fff
 ```
 
 ---
 
-## 🔄 Purchase + EMI + Billing Flow
+## 🔄 Core Transaction Flow (Enhanced)
 
 ```mermaid
 sequenceDiagram
-    participant User
-    participant Browser
-    participant PurchaseServlet
-    participant TransactionService
-    participant EmiServlet
-    participant EmiService
-    participant BillingServlet
-    participant Database
+    autonumber
 
-    User->>Browser: Make Purchase
-    Browser->>PurchaseServlet: POST /purchase
-    PurchaseServlet->>TransactionService: purchase(userId, amount)
-    TransactionService->>Database: Save transaction
-    Database-->>TransactionService: Success
-    TransactionService-->>PurchaseServlet: true
-    PurchaseServlet-->>Browser: Purchase Successful
+    participant U as User
+    participant B as Browser
+    participant PS as PurchaseServlet
+    participant TS as TransactionService
+    participant ES as EmiServlet
+    participant EMS as EmiService
+    participant DB as Database
 
-    User->>Browser: Convert to EMI
-    Browser->>EmiServlet: POST /emi
-    EmiServlet->>EmiService: convert(txId, months, amount)
-    EmiService->>Database: Update EMI data
-    Database-->>EmiService: Success
-    EmiService-->>EmiServlet: true
-    EmiServlet-->>Browser: EMI Converted Successfully
+    U->>B: Make Purchase
+    B->>PS: POST /purchase
+    PS->>TS: purchase(userId, amount)
+    TS->>DB: Save transaction
+    DB-->>TS: Success
+    TS-->>PS: true
+    PS-->>B: Purchase Successful
 
-    User->>Browser: View Billing
-    Browser->>BillingServlet: GET /billing
-    BillingServlet->>Database: Fetch used_amount
-    Database-->>BillingServlet: Due Amount
-    BillingServlet-->>Browser: Monthly Bill Generated
+    U->>B: Convert to EMI
+    B->>ES: POST /emi
+    ES->>EMS: convert(txId, months, amount)
+    EMS->>DB: Update EMI data
+    DB-->>EMS: Success
+    EMS-->>ES: true
+    ES-->>B: EMI Converted Successfully
 ```
 
 ---
 
-## 🔄 QR Code Generation Flow
+## 🔄 QR Generation Flow (Enhanced)
 
 ```mermaid
 sequenceDiagram
-    participant User
-    participant Browser
-    participant QRServlet
-    participant QRUtil
+    autonumber
 
-    User->>Browser: Request QR with txnId
-    Browser->>QRServlet: GET /generateQR
-    QRServlet->>QRUtil: generateQRCode(qrText)
-    QRUtil-->>QRServlet: PNG Image Stream
-    QRServlet-->>Browser: Display QR Code
+    participant U as User
+    participant B as Browser
+    participant QS as QRServlet
+    participant QR as QRUtil
+
+    U->>B: Request QR (txnId)
+    B->>QS: GET /generateQR
+    QS->>QR: generateQRCode(qrText)
+    QR-->>QS: PNG Stream
+    QS-->>B: Display QR Code
 ```
+
+---
 
